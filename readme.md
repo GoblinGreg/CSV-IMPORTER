@@ -1,205 +1,143 @@
 # CSV Importer - Flask Application
 
-Aplikacja Flask do importowania plików CSV do bazy danych MySQL. Projekt jest w fazie rozwoju - obecnie zawiera podstawową strukturę z API endpoints, Dockerem i CI/CD.
+A Flask application for importing CSV files into a MySQL database. This project is currently under development and includes basic structure with API endpoints, Docker support, and automated testing.
 
-## 🚀 Funkcjonalności (obecne)
+## Current Features
 
-- ✅ Podstawowa aplikacja Flask z trzema endpointami
-- ✅ Testy automatyczne używające biblioteki `requests`
-- ✅ Dockeryzacja aplikacji
-- ✅ CI/CD pipeline przez GitHub Actions i Railway
+- Basic Flask application with three endpoints
+- Automated tests using the `requests` library
+- Docker containerization
+- CI/CD pipeline through GitHub Actions and Railway
 
-## 📋 Wymagania
+## Requirements
 
 - Python 3.11+
-- Docker (opcjonalnie)
+- Docker (optional)
 - Git
 
-## 🛠️ Instalacja lokalna
+## Local Installation
 
-### 1. Klonowanie repozytorium
+### 1. Clone the repository
 
 ```bash
-git clone <url-twojego-repo>
-cd <nazwa-folderu>
+git clone <your-repo-url>
+cd <folder-name>
 ```
 
-### 2. Utworzenie środowiska wirtualnego
+### 2. Create virtual environment
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# lub
+# or
 venv\Scripts\activate  # Windows
 ```
 
-### 3. Instalacja zależności
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Uruchomienie aplikacji
+### 4. Run the application
 
 ```bash
 python app.py
 ```
 
-Aplikacja będzie dostępna pod adresem: `http://localhost:5000`
+The application will be available at: `http://localhost:5000`
 
-## 🧪 Testowanie
+## Testing
 
-Aby przetestować aplikację, uruchom:
+To test the application:
 
 ```bash
-# W jednym terminalu uruchom aplikację
+# In one terminal, run the application
 python app.py
 
-# W drugim terminalu uruchom testy
+# In another terminal, run tests
 python test_app.py
 ```
 
-## 🐳 Docker
+## Docker
 
-### Budowanie obrazu
+### Building the image
 
 ```bash
 docker build -t csv-importer .
 ```
 
-### Uruchomienie kontenera
+### Running the container
 
 ```bash
 docker run -p 5000:5000 csv-importer
 ```
 
-Aplikacja będzie dostępna pod adresem: `http://localhost:5000`
+The application will be available at: `http://localhost:5000`
 
-### Wyjaśnienie Dockerfile:
+### Dockerfile explanation:
 
-1. **FROM python:3.11-slim** - używamy lekkiego obrazu Python 3.11
-2. **ENV** - ustawiamy zmienne środowiskowe (PYTHONUNBUFFERED zapobiega buforowaniu logów)
-3. **WORKDIR /app** - tworzymy i ustawiamy katalog roboczy
-4. **COPY requirements.txt** - najpierw kopiujemy tylko requirements (cache Docker)
-5. **RUN pip install** - instalujemy zależności
-6. **COPY . .** - kopiujemy resztę aplikacji
-7. **EXPOSE 5000** - dokumentujemy, że używamy portu 5000
-8. **CMD gunicorn** - uruchamiamy aplikację przez gunicorn (serwer produkcyjny)
+1. **FROM python:3.11-slim** - uses lightweight Python 3.11 image
+2. **ENV** - sets environment variables (PYTHONUNBUFFERED prevents log buffering)
+3. **WORKDIR /app** - creates and sets working directory
+4. **COPY requirements.txt** - copies requirements first (for Docker cache)
+5. **RUN pip install** - installs dependencies
+6. **COPY . .** - copies the rest of the application
+7. **EXPOSE 5000** - documents that port 5000 is used
+8. **CMD gunicorn** - runs the application with gunicorn (production server)
 
-## 🔄 CI/CD - GitHub Actions + Railway
-
-### Konfiguracja Railway:
-
-1. **Załóż konto na Railway.app**
-   - Przejdź na https://railway.app/
-   - Zaloguj się przez GitHub
-
-2. **Utwórz nowy projekt**
-   - Kliknij "New Project"
-   - Wybierz "Deploy from GitHub repo"
-   - Wybierz swoje repozytorium
-
-3. **Pobierz Railway Token**
-   - Przejdź do Account Settings → Tokens
-   - Utwórz nowy token: "Create Token"
-   - Skopiuj wygenerowany token
-
-4. **Konfiguracja GitHub Secrets**
-   - W swoim repozytorium GitHub przejdź do: Settings → Secrets and variables → Actions
-   - Dodaj nowy secret:
-     - Name: `RAILWAY_TOKEN`
-     - Value: <wklej token z Railway>
-   - Dodaj drugi secret:
-     - Name: `RAILWAY_SERVICE_NAME`
-     - Value: <nazwa twojej usługi na Railway (np. "csv-importer")>
-
-### Jak działa workflow:
-
-1. **Trigger** - Workflow uruchamia się automatycznie przy push do branch `main`
-
-2. **Job: test**
-   - Checkout kodu z repozytorium
-   - Instalacja Python 3.11
-   - Instalacja zależności z requirements.txt
-   - Uruchomienie aplikacji Flask w tle
-   - Uruchomienie testów z `test_app.py`
-
-3. **Job: deploy**
-   - Uruchamia się tylko jeśli testy przeszły
-   - Uruchamia się tylko dla branch `main`
-   - Instaluje Railway CLI
-   - Deployuje aplikację na Railway
-
-### Pierwsze wdrożenie:
-
-```bash
-# 1. Commituj zmiany
-git add .
-git commit -m "Initial setup with CI/CD"
-
-# 2. Wypushuj na GitHub
-git push origin main
-
-# 3. Sprawdź status w GitHub Actions (zakładka Actions w repo)
-```
-
-## 📁 Struktura projektu
+## Project Structure
 
 ```
 .
-├── app.py                      # Główna aplikacja Flask
-├── test_app.py                 # Testy używające requests
-├── requirements.txt            # Zależności Python
-├── Dockerfile                  # Konfiguracja Docker
-├── .dockerignore              # Pliki ignorowane przez Docker
+├── app.py                      # Main Flask application
+├── test_app.py                 # Tests using requests
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # Docker configuration
+├── .dockerignore              # Files ignored by Docker
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml         # GitHub Actions workflow
-└── README.md                  # Ten plik
+└── README.md                  # This file
 ```
 
-## 🌐 Dostępne endpointy
+## Available Endpoints
 
-| Endpoint | Metoda | Opis |
-|----------|--------|------|
-| `/` | GET | Strona główna z podstawowymi informacjami |
-| `/health` | GET | Sprawdzenie statusu aplikacji |
-| `/api/info` | GET | Lista dostępnych endpointów |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Main page with basic information |
+| `/health` | GET | Application health check |
+| `/api/info` | GET | List of available endpoints |
 
-## 🔮 Planowane funkcjonalności
+## Planned Features
 
-- [ ] Upload plików CSV
-- [ ] Parser CSV
-- [ ] Integracja z MySQL przez SQLAlchemy
-- [ ] Frontend do uploadowania plików
-- [ ] Walidacja danych CSV
-- [ ] Historia importów
-- [ ] Obsługa błędów importu
+- CSV file upload
+- CSV parser
+- MySQL integration via SQLAlchemy
+- Frontend for file uploads
+- CSV data validation
+- Import history
+- Import error handling
 
-## 🐛 Rozwiązywanie problemów
+## Troubleshooting
 
-### Aplikacja nie startuje
+### Application won't start
 ```bash
-# Sprawdź czy port 5000 nie jest zajęty
+# Check if port 5000 is already in use
 lsof -i :5000  # Linux/Mac
 netstat -ano | findstr :5000  # Windows
 ```
 
 ### Docker build fails
 ```bash
-# Wyczyść cache Dockera
+# Clear Docker cache
 docker system prune -a
 ```
 
-### Railway deployment fails
-- Sprawdź czy token jest poprawny w GitHub Secrets
-- Sprawdź logi w Railway dashboard
-- Upewnij się że nazwa service jest poprawna
+## License
 
-## 📝 Licencja
+This project is private property and serves educational purposes.
 
-Ten projekt jest własnością prywatną i służy celom edukacyjnym.
+## Author
 
-## 👤 Autor
-
-Twoje imię/nazwa
+Grzegorz P (GoblinGreg)

@@ -4,16 +4,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    """Główna strona - endpoint testowy"""
+    """Main Side - Test endpoint """
     return jsonify({
-        'message': 'Witaj w aplikacji CSV Importer!',
+        'message': 'Hello in CSV Importer Application!',
         'status': 'running',
         'version': '1.0.0'
     })
 
 @app.route('/health')
 def health():
-    """Endpoint do sprawdzania stanu aplikacji"""
+    """Endpoint to check application status"""
     return jsonify({
         'status': 'healthy',
         'service': 'csv-importer'
@@ -21,12 +21,12 @@ def health():
 
 @app.route('/api/info')
 def api_info():
-    """Informacje o dostępnych endpointach"""
+    """Info about available endpoints"""
     return jsonify({
         'endpoints': [
-            {'path': '/', 'method': 'GET', 'description': 'Strona główna'},
-            {'path': '/health', 'method': 'GET', 'description': 'Status aplikacji'},
-            {'path': '/api/info', 'method': 'GET', 'description': 'Informacje o API'}
+            {'path': '/', 'method': 'GET', 'description': 'Main Site'},
+            {'path': '/health', 'method': 'GET', 'description': 'Application Status'},
+            {'path': '/api/info', 'method': 'GET', 'description': 'Info About API'}
         ]
     })
 
