@@ -91,10 +91,13 @@ The application will be available at: `http://localhost:5000`
 ```
 .
 ├── app.py                      # Main Flask application
+├── main.py                     # Gunicorn entry point
 ├── test_app.py                 # Tests using requests
 ├── requirements.txt            # Python dependencies
+├── Procfile                    # Heroku/Railway deployment config
 ├── Dockerfile                  # Docker configuration
 ├── .dockerignore              # Files ignored by Docker
+├── .gitignore                 # Files ignored by Git
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml         # GitHub Actions workflow
