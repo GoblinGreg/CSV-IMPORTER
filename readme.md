@@ -15,6 +15,7 @@ A Flask application for importing CSV files into a MySQL database. This project 
 - Docker (optional)
 - Git
 
+
 ## Local Installation
 
 ### 1. Clone the repository
