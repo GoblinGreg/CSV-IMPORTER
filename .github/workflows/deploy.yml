@@ -1,4 +1,4 @@
-name: Deploy to Railway
+name: CI - Flask App
 
 on:
   push:
@@ -11,44 +11,53 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Run Flask app in background
-      run: |
-        python app.py &
-        sleep 5
-    
-    - name: Run tests
-      run: |
-        python test_app.py
 
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Install Railway CLI
-      run: npm i -g @railway/cli
-    
-    - name: Deploy to Railway
-      run: railway up --service ${{ secrets.RAILWAY_SERVICE_NAME }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start Flask server (background)
+        env:
+          FLASK_ENV: testing
+        run: |
+          python main.py &
+          echo $! > flask_pid.txt
+
+      - name: Wait for server to be ready
+        run: |
+          for i in {1..10}; do
+            if curl --fail http://127.0.0.1:5000/health > /dev/null 2>&1; then
+              echo "Server is up"
+              exit 0
+            fi
+            echo "Waiting for server..."
+            sleep 2
+          done
+          echo "Server did not start in time"
+          exit 1
+
+      - name: Run tests
+        run: python test_app.py
+
+      - name: Stop Flask server
+        if: always()
+        run: |
+          if [ -f flask_pid.txt ]; then
+            PID=$(cat flask_pid.txt) || true
+            if [ -n "$PID" ]; then
+              kill "$PID" || true
+            fi
+            rm -f flask_pid.txt || true
+          fi
 
