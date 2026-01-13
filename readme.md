@@ -61,6 +61,17 @@ Notes:
 - Create the database/schema in MySQL before running the app.
 - The app will call `db.create_all()` on first request to create the needed table.
 
+## Using a .env file (recommended)
+
+To avoid exporting `DATABASE_URL` and `SECRET_KEY` each time, create a `.env` file in the project root. See `.env.example` for placeholders. The app uses `python-dotenv` to load variables automatically when the app starts.
+
+Example `.env` values:
+
+```
+DATABASE_URL=mysql+pymysql://user:pass@host:3306/dbname
+SECRET_KEY=your-secure-secret
+```
+
 ## Docker
 
 Build and run the image (it uses the `DATABASE_URL` env var if you provide it):

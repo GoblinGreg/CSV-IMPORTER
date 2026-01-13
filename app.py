@@ -1,8 +1,12 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
+from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime
+
+# Load environment variables from .env if present
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'devkey')
