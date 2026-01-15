@@ -1,8 +1,10 @@
 """Main entry point for the application"""
+import os
 from app import app, db
 
 if __name__ == '__main__':
     # Ensure tables exist before serving (works with Flask 3+)
     with app.app_context():
         db.create_all()
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)

@@ -48,7 +48,9 @@ def test_routes(base_url='http://localhost:5000'):
     try:
         csv_content = 'col1,col2\n10,20\n30,40\n'
         files = {'file': ('sample.csv', csv_content, 'text/csv')}
-        resp = requests.post(f'{base_url}/upload', files=files, allow_redirects=False)
+        headers = {'Accept': 'application/json'}
+        resp = requests.post(
+            f'{base_url}/upload', files=files, headers=headers, allow_redirects=False)
         print(f"✅ Test 4 - Upload CSV [POST /upload]")
         print(f"   Status: {resp.status_code}")
         assert resp.status_code in (200, 302, 303)
